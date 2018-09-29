@@ -1,5 +1,4 @@
 package edu.jsu.mcis;
-
 import java.util.Scanner;
 
 public class TicTacToeController {
@@ -11,7 +10,7 @@ public class TicTacToeController {
     /* CONSTRUCTOR */
 
     public TicTacToeController(TicTacToeModel model, TicTacToeView view) {
-        
+    
         /* Initialize model and view */
 
         this.model = model;
@@ -27,6 +26,7 @@ public class TicTacToeController {
         
         /* Prompt player for next move using view's showNextMovePrompt() */
         
+        
         view.showNextMovePrompt();
         
         /* Receive and validate input, which should be read at the keyboard as
@@ -34,7 +34,22 @@ public class TicTacToeController {
            center square of a 3 x 3 grid).  Make mark if input is valid, or show
            error message using view's showInputError() if input is invalid. */
         
-        /* INSERT YOUR CODE HERE */
+      
+        int row = keyboard.nextInt();
+        int col = keyboard.nextInt();
+        
+        
+        if(model.makeMark(row, col) == false )
+        {
+            view.showInputError();
+        }
+        
+        else
+        {
+            model.makeMark(row, col);
+        }
+        
+        
         
     }
 

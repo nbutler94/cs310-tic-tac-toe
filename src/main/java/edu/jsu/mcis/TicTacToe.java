@@ -12,11 +12,14 @@ public class TicTacToe {
         
         /* If a different size is provided as a command-line argument, use it instead */
 
-        if (args.length >= 1) {
+        if (args.length >= 1) 
+        {
             
-            try {
+            try 
+            {
                 width = Integer.parseInt(args[0]);
             }
+            
             catch(NumberFormatException e) {}
             
         }
