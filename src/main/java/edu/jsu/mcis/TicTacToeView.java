@@ -1,106 +1,175 @@
 package edu.jsu.mcis;
 
+import java.awt.*;
+import java.awt.event.*;
+import java.util.LinkedList;
+import javax.swing.*;
 
-public class TicTacToeView {
+public class TicTacToeView extends JPanel implements ActionListener {
+    
+    TicTacToeModel model;
 
-    private TicTacToeModel model;
-   
-    
-    
-    
+    private JButton[][] squares;
+    private JPanel squaresPanel;
+    private JLabel resultLabel;
+
     public TicTacToeView(TicTacToeModel model) {
-        
+
         this.model = model;
+
+        int width = model.getWidth();
+
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        squares = new JButton[width][width];
+        squaresPanel = new JPanel(new GridLayout(width,width));
+        resultLabel = new JLabel();
+        resultLabel.setName("ResultLabel");
         
+        for (int row = 0; row < width; row++){
+            
+            for (int col = 0; col < width; col++){
+                
+                squares[row][col] = new JButton(); 
+                squares[row][col].addActionListener(this);
+                squares[row][col].setName("Square" + row + col);
+                squares[row][col].setPreferredSize(new Dimension(64,64));
+                squaresPanel.add(squares[row][col]);
+                
+            }
+            
+        }
+
+        this.add(squaresPanel);
+        this.add(resultLabel);
         
-        
-        
+        resultLabel.setText("Welcome to Tic-Tac-Toe!");
+
     }
-	
-    public void viewModel() {
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
         
-        /* Print the board to the console (see examples) */
+        /* Handle button clicks.  Extract the row and col values from the name
+           of the button that was clicked, then make the mark in the grid using
+           the Model's "makeMark()" method.  Finally, use the "updateSquares()"
+           method to refresh the View.  If the game is over, show the result
+           (from the Model's "getResult()" method) in the result label. */
         
-        /* INSERT YOUR CODE HERE */
+        String name = ((JButton) event.getSource()).getName(); // Get button name
         
-        System.out.print("  ");
+        // INSERT YOUR CODE HERE
         
-        for(int n = 0; n < model.width; n++)
+        name = name.replaceAll("\\D", "");
+        
+        int row = Character.getNumericValue(name.charAt(0));
+        int col = Character.getNumericValue(name.charAt(1));
+        
+        
+        if (model.makeMark(row, col) == false)
         {
-            System.out.print(n);
+            System.out.print("ERROR");
+        
         }
         
-        System.out.println("\n");
+        else
+        {
+            model.makeMark(row, col);
         
+        }
         
-          for(int i = 0; i < model.width; i++)
-          {
-              System.out.print(i + " ");
-              
-              for(int j = 0; j < model.width; j++)
-              {
-                  
-                  System.out.print(model.grid[i][j]);
-                  
-              }
-                  
-              System.out.println("");
-              
-          } 
-             
-        
-        
+        String markName;
+                        
+        TicTacToeModel.Mark mark = model.getMark(row, col);
+        TicTacToeModel.Result result = model.getResult();
+                
+            if(mark == mark.X)
+            {
+                markName = "X";
+                squares[row][col].setText(markName);
+                
+                
+                
+            }
+                            
+                
+            if(mark == mark.O)
+            {
+                markName = "O";
+                squares[row][col].setText(markName);
+                
+                    
+            }
+           
+            if(model.makeMark(row, col) == false)
+            {
+                
+                String message = "";
+                if(result == result.X)
+                {
+                    message = "X";
+                    
+                }
+                
+                if(result == result.O)
+                {
+                    message = "O";
+                }
+                
+                if(result == result.TIE)
+                {
+                    message = "Tie";
+                }
+                
+                showResult(message);
+                
+                
+                
+            }
+            
+        TicTacToeView view = new TicTacToeView(model);
        
-
-    }
-
-    public void showNextMovePrompt() {
-
+            
+        view.updateSquares();
         
-        /* Display a prompt for the player's next move (see examples) */
+    }
+    
+            
+            
+        
+    public void updateSquares() {
 
-        /* INSERT YOUR CODE HERE */
-        if (model.isXTurn() == true)
+        /* Loop through all View buttons and (re)set the text of each button
+           to reflect the grid contents (use the Model's "getMark()" method). */
+        
+        for(int i = 0; i < model.width; i++)
         {
-            System.out.print("\nPlayer 1 (X) Move:");
-            System.out.print("\nEnter the row and column numbers, seperated by a space: ");
-            
-            
+            for(int j = 0; j < model.width; j++)
+            {
+                String markName;
+                        
+                TicTacToeModel.Mark mark = model.getMark(i, j);
+                
+                if(mark == mark.X)
+                {
+                    markName = "X";
+                    squares[i][j].setText(markName);
+                    
+                }
+                            
+                
+                if(mark == mark.O)
+                {
+                    markName = "O";
+                    squares[i][j].setText(markName);
+                }
+                
+            }
         }
         
+    }
         
-        
-        else if (model.isXTurn() == false)
-        {
-            System.out.print("\nPlayer 2 (Y) Move: ");
-            System.out.print("\nEnter the row and column numbers, seperated by a space: ");
-            
-        }
-        
-            
-        
-
+    public void showResult(String message) {
+        resultLabel.setText(message);
     }
 
-    public void showInputError() {
-
-        /* Display an error if input is invalid (see examples) */
-
-        /* INSERT YOUR CODE HERE */
-        
-       
-        System.out.println("\nError: either the mark is out of bounds or the square is already taken.\n"
-                + "Please enter another valid input.\n");
-        
-        
-    }
-
-    public void showResult(String r) {
-
-        /* Display final winner */
-
-        System.out.println(r + "!");
-
-    }
-	
 }

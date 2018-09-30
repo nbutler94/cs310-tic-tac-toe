@@ -2,7 +2,6 @@ package edu.jsu.mcis;
 
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Array;
 
 public class TicTacToeModel {
     
@@ -107,6 +106,8 @@ public class TicTacToeModel {
            location, but only if the location is valid and if the square is
            empty! */
          
+        Mark mark = getMark(row, col);
+        
           if(isValidSquare(row,col) == false)
         {
          
@@ -132,12 +133,18 @@ public class TicTacToeModel {
         }
         
       
-        else
+        if(isMarkWin(mark) == true || isSquareMarked(row, col) == true)
         {
+            
             return false;
         }
         
         
+        
+        else
+        {
+           return false;
+        }
         
         
     }
